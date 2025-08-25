@@ -33,6 +33,21 @@ public class TaskController {
         return ResponseEntity.ok().body(task);
     }
 
+    @PostMapping()
+    public ResponseEntity<Void> addTask(@RequestBody AddTask body) {
+        Long newId = counter.incrementAndGet();
+
+        Task task = new Task();
+        task.setId(newId);
+        task.setTitle(body.getTitle());
+        task.setCompleted(false);
+
+        tasks.put(newId, task);
+
+        URI taskURI = URI.create("/tasks/" + newId);
+        return ResponseEntity.created(taskURI).build();
+    }
+    
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateTask(@PathVariable("id") Long id, @RequestBody UpdateTask body) {
         Task task = tasks.get(id);
@@ -55,21 +70,6 @@ public class TaskController {
 
         tasks.remove(task.getId());
         return ResponseEntity.ok().build();
-    }
-
-    @PostMapping()
-    public ResponseEntity<Void> addTask(@RequestBody AddTask body) {
-        Long newId = counter.incrementAndGet();
-
-        Task task = new Task();
-        task.setId(newId);
-        task.setTitle(body.getTitle());
-        task.setCompleted(false);
-
-        tasks.put(newId, task);
-
-        URI taskURI = URI.create("/tasks/" + newId);
-        return ResponseEntity.created(taskURI).build();
     }
 
 }
