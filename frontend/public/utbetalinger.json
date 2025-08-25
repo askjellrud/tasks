@@ -1,0 +1,20 @@
+[
+  {
+    "id": "1",
+    "dato": "2025-08-01",
+    "beløp": 10500,
+    "beskrivelse": "Dagpenger"
+  },
+  {
+    "id": "2",
+    "dato": "2025-07-15",
+    "beløp": 8700,
+    "beskrivelse": "Sykepenger"
+  },
+  {
+    "id": "3",
+    "dato": "2025-07-01",
+    "beløp": 11200,
+    "beskrivelse": "Foreldrepenger"
+  }
+]
