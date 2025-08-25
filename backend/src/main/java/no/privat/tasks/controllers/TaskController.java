@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class TaskController {
 
     private AtomicLong counter = new AtomicLong(0);
-    private Map<Long, Task> tasks = new HashMap<>();
+    private Map<Long, Task> tasks = new ConcurrentHashMap<>();
 
     @GetMapping()
     public ResponseEntity<Collection<Task>> getAll() {
