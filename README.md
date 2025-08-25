@@ -1,4 +1,1 @@
-# Example using Java Spring Boot as backend and React Vite as frontend
-
-
-WIP!
+# Example project using Java Spring Boot as backend and React as frontend
