@@ -47,7 +47,7 @@ public class TaskController {
         URI taskURI = URI.create("/tasks/" + newId);
         return ResponseEntity.created(taskURI).build();
     }
-    
+
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateTask(@PathVariable("id") Long id, @RequestBody UpdateTask body) {
         Task task = tasks.get(id);
