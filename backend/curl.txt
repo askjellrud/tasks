@@ -1,0 +1,9 @@
+curl -X POST "http://localhost:8080/tasks" \
+     -H "Content-Type: application/json" \
+     -d '{"title": "new task"}'
+
+curl -X PUT "http://localhost:8080/tasks/1" \
+     -H "Content-Type: application/json" \
+     -d '{"title": "Updated task"}'
+
+curl -X DELETE "http://localhost:8080/tasks/1"
