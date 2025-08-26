@@ -1,40 +1,41 @@
 package no.privat.tasks.service;
 
 import no.privat.tasks.model.Task;
+import no.privat.tasks.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class TaskService {
-    private AtomicLong counter = new AtomicLong(0);
-    private Map<Long, Task> tasks = new ConcurrentHashMap<>();
+
+    TaskRepository taskRepository;
+
+    public TaskService(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
 
     public Collection<Task> getTasks() {
-        return tasks.values();
+        return taskRepository.findAll();
     }
 
     public Optional<Task> getTask(Long id) {
-        if (tasks.containsKey(id)) {
-            return Optional.of(tasks.get(id));
+        Optional<Task> task = taskRepository.findById(id);
+
+        if (task.isPresent()) {
+            return Optional.of(task.get());
         } else {
             return Optional.empty();
         }
     }
 
     public Task addTask(String title) {
-        Long newId = counter.incrementAndGet();
-
         Task task = new Task();
-        task.setId(newId);
         task.setTitle(title);
         task.setCompleted(false);
 
-        tasks.put(newId, task);
+        taskRepository.save(task);
         return task;
     }
 
@@ -46,15 +47,18 @@ public class TaskService {
         }
 
         task.get().setTitle(title);
+        taskRepository.save(task.get());
         return true;
     }
-    
+
     public boolean removeTask(Long id) {
-        if (tasks.containsKey(id)) {
-            tasks.remove(id);
-            return true;
-        } else {
+        Optional<Task> task = getTask(id);
+
+        if (!task.isPresent()) {
             return false;
         }
+
+        taskRepository.deleteById(id);
+        return true;
     }
 }
