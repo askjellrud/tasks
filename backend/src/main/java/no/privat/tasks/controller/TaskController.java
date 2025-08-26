@@ -1,12 +1,14 @@
 package no.privat.tasks.controller;
 
 import no.privat.tasks.model.Task;
+import no.privat.tasks.service.TaskService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -14,61 +16,53 @@ import java.util.concurrent.atomic.AtomicLong;
 @RequestMapping("/tasks")
 public class TaskController {
 
-    private AtomicLong counter = new AtomicLong(0);
-    private Map<Long, Task> tasks = new ConcurrentHashMap<>();
+    private final TaskService taskService;
+
+    public TaskController(TaskService taskService) {
+        this.taskService = taskService;
+    }
 
     @GetMapping()
     public ResponseEntity<Collection<Task>> getAll() {
-        return ResponseEntity.ok().body(tasks.values());
+        return ResponseEntity.ok().body(taskService.getTasks());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Task> getTask(@PathVariable("id") Long id) {
-        Task task = tasks.get(id);
+        Optional<Task> task = taskService.getTask(id);
 
-        if (task == null) {
+        if (!task.isPresent()) {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok().body(task);
+        return ResponseEntity.ok().body(task.get());
     }
 
     @PostMapping()
     public ResponseEntity<Void> addTask(@RequestBody AddTask body) {
-        Long newId = counter.incrementAndGet();
+        Task task = taskService.addTask(body.getTitle());
 
-        Task task = new Task();
-        task.setId(newId);
-        task.setTitle(body.getTitle());
-        task.setCompleted(false);
-
-        tasks.put(newId, task);
-
-        URI taskURI = URI.create("/tasks/" + newId);
+        URI taskURI = URI.create("/tasks/" + task.getId());
         return ResponseEntity.created(taskURI).build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateTask(@PathVariable("id") Long id, @RequestBody UpdateTask body) {
-        Task task = tasks.get(id);
+       boolean updated = taskService.updateTitle(id, body.getTitle());
 
-        if (task == null) {
+        if (!updated) {
             return ResponseEntity.notFound().build();
         }
-
-        task.setTitle(body.getTitle());
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> removeTask(@PathVariable("id") Long id) {
-        Task task = tasks.get(id);
+        boolean removed = taskService.removeTask(id);
 
-        if (task == null) {
+        if (!removed) {
             return ResponseEntity.notFound().build();
         }
-
-        tasks.remove(task.getId());
         return ResponseEntity.ok().build();
     }
 

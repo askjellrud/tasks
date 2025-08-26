@@ -1,7 +1,7 @@
 package no.privat.tasks.controller;
 
 public class AddTask {
-    String title;
+    private String title;
 
     public String getTitle() {
         return title;
