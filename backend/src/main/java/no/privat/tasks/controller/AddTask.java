@@ -1,7 +1,7 @@
-package no.privat.tasks.controllers;
+package no.privat.tasks.controller;
 
-public class UpdateTask {
-    private String title;
+public class AddTask {
+    String title;
 
     public String getTitle() {
         return title;

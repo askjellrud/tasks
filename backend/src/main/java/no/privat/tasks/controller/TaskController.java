@@ -1,4 +1,4 @@
-package no.privat.tasks.controllers;
+package no.privat.tasks.controller;
 
 import no.privat.tasks.model.Task;
 import org.springframework.http.ResponseEntity;
