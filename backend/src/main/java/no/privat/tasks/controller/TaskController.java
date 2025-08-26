@@ -7,10 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.Collection;
-import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
 @RequestMapping("/tasks")
@@ -48,7 +45,7 @@ public class TaskController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateTask(@PathVariable("id") Long id, @RequestBody UpdateTask body) {
-       boolean updated = taskService.updateTitle(id, body.getTitle());
+        boolean updated = taskService.updateTitle(id, body.getTitle());
 
         if (!updated) {
             return ResponseEntity.notFound().build();

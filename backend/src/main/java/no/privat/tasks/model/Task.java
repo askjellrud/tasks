@@ -16,7 +16,8 @@ public class Task {
     private String title;
     private boolean completed;
 
-    public Task() {}
+    public Task() {
+    }
 
     public Task(Long id, String title, boolean completed) {
         this.id = id;
